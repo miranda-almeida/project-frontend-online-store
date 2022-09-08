@@ -1,9 +1,11 @@
 import React from 'react';
+import Categories from './Categories';
 
 class Home extends React.Component {
   render() {
     return (
       <>
+        <Categories />
         <input type="text" />
         <p
           data-testid="home-initial-message"
