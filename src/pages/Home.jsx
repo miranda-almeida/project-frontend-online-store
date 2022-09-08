@@ -13,6 +13,16 @@ class Home extends React.Component {
           Digite algum termo de pesquisa ou escolha uma categoria.
 
         </p>
+        <input
+          data-testid="query-input"
+        />
+        <button
+          data-testid="query-button"
+          type="submit"
+        >
+          Pesquisar
+
+        </button>
       </>
     );
   }
