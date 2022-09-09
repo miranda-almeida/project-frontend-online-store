@@ -6,7 +6,7 @@ class Home extends React.Component {
   constructor() {
     super();
     this.state = {
-      products: '',
+      products: [],
       searchValue: '',
     };
   }
@@ -22,6 +22,11 @@ class Home extends React.Component {
     const { value } = target;
     const url = `https://api.mercadolibre.com/sites/MLB/search?category=${value}`;
     this.fetchProducts(url);
+  };
+
+  fetchCategory = async (categoryId) => {
+    const returnsData = await getProductsFromCategoryAndQuery(categoryId);
+    this.setState({ products: returnsData.results });
   };
 
   render() {
@@ -56,7 +61,7 @@ class Home extends React.Component {
 
           )) : <h3>Nenhum produto foi encontrado</h3>}
         </div>
-        <Categories />
+        <Categories fetchCategory={ this.fetchCategory } />
       </>
     );
   }
