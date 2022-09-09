@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { getCategories } from '../services/api';
 
@@ -17,6 +18,7 @@ export default class Categories extends Component {
 
   render() {
     const { filter } = this.state;
+    const { fetchCategory } = this.props;
     return (
       <ul>
         { filter.map((selected) => (
@@ -25,6 +27,7 @@ export default class Categories extends Component {
               type="radio"
               data-testid="category"
               name={ selected.id }
+              onClick={ () => fetchCategory(selected.id) }
             />
             { selected.name }
           </div>
@@ -33,3 +36,6 @@ export default class Categories extends Component {
     );
   }
 }
+Categories.propTypes = {
+  fetchCategory: PropTypes.func,
+}.isRequired;
