@@ -57,8 +57,11 @@ class Home extends React.Component {
         </button>
         <div>
           { products ? products.map((product) => (
-            <div data-testid="product" key={ product.id } />
-
+            <div data-testid="product" key={ product.id }>
+              <h2>{ product.title }</h2>
+              <img src={ product.thumbnail } alt={ product.title } />
+              <p>{ product.price }</p>
+            </div>
           )) : <h3>Nenhum produto foi encontrado</h3>}
         </div>
         <Categories fetchCategory={ this.fetchCategory } />
