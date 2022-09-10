@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 import Categories from './Categories';
 
@@ -6,7 +8,7 @@ class Home extends React.Component {
   constructor() {
     super();
     this.state = {
-      products: [],
+      products: '',
       searchValue: '',
     };
   }
@@ -60,7 +62,13 @@ class Home extends React.Component {
             <div data-testid="product" key={ product.id }>
               <h2>{ product.title }</h2>
               <img src={ product.thumbnail } alt={ product.title } />
-              <p>{ product.price }</p>
+              <p>{ `R$ ${product.price}` }</p>
+              <Link
+                data-testid="product-detail-link"
+                to={ `/productdetails/${product.id}` }
+              >
+                <button type="button">Ver detalhes do produto</button>
+              </Link>
             </div>
           )) : <h3>Nenhum produto foi encontrado</h3>}
         </div>
