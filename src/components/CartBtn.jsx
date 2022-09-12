@@ -7,7 +7,7 @@ export default class CartBtn extends Component {
       <div>
         <Link to="/cart">
           <button type="button">
-            Adicionar ao Carrinho
+            Carrinho
           </button>
         </Link>
       </div>
