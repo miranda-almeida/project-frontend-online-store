@@ -1,16 +1,30 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 // import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 import Categories from './Categories';
 
 class Home extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      products: '',
-      searchValue: '',
-    };
+  state = {
+    products: '',
+    searchValue: '',
+    localStorageList: [],
+  };
+
+  // async componentDidMount() {
+  //   const { match: { params: { id } } } = this.props;
+  //   // const returns = await getProductFromProductId(id);
+  //   // const { title, thumbnail, price } = returns;
+  //   // this.setState((previousState) => (
+  //   //   { localStorageList: [...previousState.localStorageList,
+  //   //     { title, thumbnail, price }] }
+  //   // ));
+  // }
+
+  componentWillUnmount() {
+    const { localStorageList } = this.state;
+    localStorage.setItem('cart', JSON.stringify(localStorageList));
   }
 
   fetchProducts = (url) => {
@@ -29,6 +43,18 @@ class Home extends React.Component {
   fetchCategory = async (categoryId) => {
     const returnsData = await getProductsFromCategoryAndQuery(categoryId);
     this.setState({ products: returnsData.results });
+  };
+
+  addingToCart = (product) => {
+    const local = localStorage.getItem('cart');
+    const ifTrue = local ? JSON.parse(local) : [];
+    console.log(local);
+    const returnedList = [...ifTrue, product];
+    localStorage.setItem('cart', JSON.stringify(returnedList));
+    this.setState((previousState) => (
+      { localStorageList: [...previousState.localStorageList,
+        product] }
+    ));
   };
 
   render() {
@@ -69,6 +95,13 @@ class Home extends React.Component {
               >
                 <button type="button">Ver detalhes do produto</button>
               </Link>
+              <button
+                type="button"
+                data-testid="product-add-to-cart"
+                onClick={ () => this.addingToCart(product) }
+              >
+                Adicionar ao carrinho
+              </button>
             </div>
           )) : <h3>Nenhum produto foi encontrado</h3>}
         </div>
@@ -77,4 +110,11 @@ class Home extends React.Component {
     );
   }
 }
+
+Home.propTypes = {
+  title: PropTypes.string,
+  thumbanil: PropTypes.string,
+  price: PropTypes.number,
+}.isRequired;
+
 export default Home;
