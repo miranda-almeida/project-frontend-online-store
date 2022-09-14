@@ -46,9 +46,27 @@ class Home extends React.Component {
   };
 
   addingToCart = (product) => {
+    product.quantity = 1;
     const local = localStorage.getItem('cart');
     const ifTrue = local ? JSON.parse(local) : [];
-    console.log(local);
+    const verify = ifTrue.some((item) => item.id === product.id);
+
+    if (verify === true) {
+      const testing = ifTrue
+        .reduce((accumulator, current) => {
+          if (current.id === product.id) {
+            current.quantity += 1;
+            console.log(current.quantity);
+            accumulator = ([...accumulator, current]);
+            return accumulator;
+          }
+          accumulator = ([...accumulator, current]);
+          return accumulator;
+        }, []);
+      console.log(testing);
+      return localStorage.setItem('cart', JSON.stringify(testing));
+    }
+
     const returnedList = [...ifTrue, product];
     localStorage.setItem('cart', JSON.stringify(returnedList));
     this.setState((previousState) => (
@@ -83,6 +101,12 @@ class Home extends React.Component {
           Pesquisar
 
         </button>
+        <Link
+          data-testid="shopping-cart-button"
+          to="/cart"
+        >
+          Carrinho
+        </Link>
         <div>
           { products ? products.map((product) => (
             <div data-testid="product" key={ product.id }>
