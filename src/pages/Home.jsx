@@ -101,6 +101,12 @@ class Home extends React.Component {
           Pesquisar
 
         </button>
+        <Link
+          data-testid="shopping-cart-button"
+          to="/cart"
+        >
+          Carrinho
+        </Link>
         <div>
           { products ? products.map((product) => (
             <div data-testid="product" key={ product.id }>

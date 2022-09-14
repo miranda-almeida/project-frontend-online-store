@@ -9,28 +9,44 @@ export default class extends Component {
   componentDidMount() {
     const returnCache = localStorage.getItem('cart');
     const returned = JSON.parse(returnCache);
-    // console.log(returned);
+    console.log(returned);
     this.setState({ localStorageList: returned });
   }
 
-  increaseQnty = (product) => {
+  increaseQnty = (id) => {
     const { localStorageList } = this.state;
-    localStorageList
+    const toReturn = localStorageList
       .reduce((accumulator, current) => {
-        if (current.id === product.id) {
+        if (current.id === id) {
           current.quantity += 1;
           accumulator = ([...accumulator, current]);
           return accumulator;
         }
         accumulator = ([...accumulator, current]);
         // product.quantity = [accumulator];
-        return product.quantity;
+        return accumulator;
       }, []);
-    console.log(product.quantity); // undefined
-    return product.quantity;
-    // console.log(testing);
-    // localStorage.setItem('cart', JSON.stringify(testing));
-    // this.setState({ localStorageList: testing });
+    this.setState({ localStorageList: toReturn });
+  };
+
+  decreaseQnty = (id) => {
+    const { localStorageList } = this.state;
+    const toReturn = localStorageList
+      .reduce((accumulator, current) => {
+        if (current.id === id) {
+          if (current.quantity === 1) {
+            accumulator = ([...accumulator, current]);
+            return accumulator;
+          }
+          current.quantity -= 1;
+          accumulator = ([...accumulator, current]);
+          return accumulator;
+        }
+        accumulator = ([...accumulator, current]);
+        // product.quantity = [accumulator];
+        return accumulator;
+      }, []);
+    this.setState({ localStorageList: toReturn });
   };
 
   removeItem = (id) => {
@@ -58,11 +74,10 @@ export default class extends Component {
         ) : (
           localStorageList.map((product) => (
             <div key={ product.id }>
-              <h2 data-testid="shopping-cart-product-name">{ product.title}</h2>
+              <h2 data-testid="shopping-cart-product-name">{ product.title }</h2>
               <h4>{`R$ ${product.price}`}</h4>
               <p data-testid="shopping-cart-product-quantity">
                 { product.quantity }
-                {console.log(product.quantity)}
               </p>
               <button
                 type="button"
@@ -76,7 +91,7 @@ export default class extends Component {
                 type="button"
                 value="diminui"
                 data-testid="product-decrease-quantity"
-                onClick={ this.btnClick }
+                onClick={ () => this.decreaseQnty(product.id) }
               >
                 Remover quantidade
               </button>
